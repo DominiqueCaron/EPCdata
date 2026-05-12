@@ -1,0 +1,11 @@
+﻿ParId,Description,species,value
+26,canopy light extinction coefficient,Pinus banksiana,0.5
+28,canopy average specific leaf area (projected area basis),Pinus banksiana,6
+30,fraction of leaf N in Rubisco,Pinus banksiana,0.06
+31,maximum stomatal conductance (projected area basis),Pinus banksiana,0.001
+32,cuticular conductance (projected area basis),Pinus banksiana,0.00001
+33,boundary layer conductance (projected area basis),Pinus banksiana,0.08
+34,leaf water potential: start of conductance reduction,Pinus banksiana,-0.5
+35,leaf water potential: complete conductance reduction,Pinus banksiana,-1.7
+36,vapor pressure deficit: start of conductance reduction,Pinus banksiana,1
+37,vapor pressure deficit: complete conductance reduction,Pinus banksiana,4

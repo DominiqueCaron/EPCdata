@@ -1,0 +1,38 @@
+﻿ParId,Description,Abbreviation,Hessl,White,TRY
+1,transfer growth period as fraction of growing season,TGP,,,
+2,litterfall as fraction of growing season,LFG,,,
+3,annual leaf and fine root turnover fraction,LFRT,17,LFRT,474
+4,annual live wood turnover fraction,LWT,,,
+5,annual whole-plant mortality fraction,WPM,,,
+6,annual fire mortality fraction,FM,,,
+7,(ALLOCATION) new fine root C : new leaf C,FRC:LC,18,FRC:LC,435
+8,(ALLOCATION) new stem C : new leaf C,SC:LC,19,SC:LC,435
+9,(ALLOCATION) new live wood C : new total wood C,LWC:TWC,20,LWC:TWC,435
+10,(ALLOCATION) new croot C : new stem C,CRC:SC,21,CRC:SC,435
+11,(ALLOCATION) current growth proportion,CGP,,,
+12,C:N of leaves,C:N_leaf,39,C:Nleaf,146
+13,"C:N of leaf litter, after retranslocation",C:N_lit,22,C:Nlit,150
+14,C:N of fine roots,C:N_fr,23,C:Nfr,167
+15,C:N of live wood,C:N_lw,,,
+16,C:N of dead wood,C:N_dw,40,C:Ndw,432
+17,leaf litter labile proportion,L_lab,25,Litter Labile,431
+18,leaf litter cellulose proportion,L_cel,,Litter Cellulose,76
+19,leaf litter lignin proportion,L_lig,,Litter Lignin,73
+20,fine root labile proportion,FR_lab,24,Fine Root Labile,422
+21,fine root cellulose proportion,FR_cel,33,Fine Root Cellulose,423
+22,fine root lignin proportion,FR_lig,34,Fine Root Lignin,424
+23,dead wood cellulose proportion,DW_cel,37,Dead Wood Cellulose,426
+24,dead wood lignin proportion,DW_lig,38,Dead Wood Lignin,425
+25,canopy water interception coefficient,W_int,,Wint,436
+26,canopy light extinction coefficient,k,30,k,10
+27,all-sided to projected leaf area ratio,LAI_all:proj,29,LAIall:proj,174
+28,canopy average specific leaf area (projected area basis),SLA,28,SLA,109
+29,ratio of shaded SLA:sunlit SLA,SLA_shd:sun,,,
+30,fraction of leaf N in Rubisco,FLNR,,,187
+31,maximum stomatal conductance (projected area basis),G_smax,,,45
+32,cuticular conductance (projected area basis),G_cut,,,
+33,boundary layer conductance (projected area basis),G_bl,,,
+34,leaf water potential: start of conductance reduction,LWP_i,32,Water Potential Initial,427
+35,leaf water potential: complete conductance reduction,LWP_f,32,Water Potential Final,428
+36,vapor pressure deficit: start of conductance reduction,VPD_i,31,Vapor Pressure Deficit Initial,429
+37,vapor pressure deficit: complete conductance reduction,VPD_f,31,Vapor Pressure Deficit Final,430

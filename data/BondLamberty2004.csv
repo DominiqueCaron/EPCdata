@@ -1,0 +1,75 @@
+﻿ParId,Description,species,value
+1,transfer growth period as fraction of growing season,Picea mariana,0.3
+2,litterfall as fraction of growing season,Picea mariana,0.3
+3,annual leaf and fine root turnover fraction,Picea mariana,0.12
+4,annual live wood turnover fraction,Picea mariana,0.7
+5,annual whole-plant mortality fraction,Picea mariana,0.01
+6,annual fire mortality fraction,Picea mariana,
+7,(ALLOCATION) new fine root C : new leaf C,Picea mariana,1.6
+8,(ALLOCATION) new stem C : new leaf C,Picea mariana,2.3
+9,(ALLOCATION) new live wood C : new total wood C,Picea mariana,0.1
+10,(ALLOCATION) new croot C : new stem C,Picea mariana,0.3
+11,(ALLOCATION) current growth proportion,Picea mariana,0.5
+12,C:N of leaves,Picea mariana,59.6
+13,"C:N of leaf litter, after retranslocation",Picea mariana,90
+14,C:N of fine roots,Picea mariana,60
+15,C:N of live wood,Picea mariana,151.5
+16,C:N of dead wood,Picea mariana,714.3
+17,leaf litter labile proportion,Picea mariana,32
+18,leaf litter cellulose proportion,Picea mariana,44
+19,leaf litter lignin proportion,Picea mariana,24
+20,fine root labile proportion,Picea mariana,30
+21,fine root cellulose proportion,Picea mariana,45
+22,fine root lignin proportion,Picea mariana,25
+23,dead wood cellulose proportion,Picea mariana,76
+24,dead wood lignin proportion,Picea mariana,24
+25,canopy water interception coefficient,Picea mariana,0.01
+26,canopy light extinction coefficient,Picea mariana,0.5
+27,all-sided to projected leaf area ratio,Picea mariana,3.1
+28,canopy average specific leaf area (projected area basis),Picea mariana,8.3
+29,ratio of shaded SLA:sunlit SLA,Picea mariana,2
+30,fraction of leaf N in Rubisco,Picea mariana,0.06
+31,maximum stomatal conductance (projected area basis),Picea mariana,0.003
+32,cuticular conductance (projected area basis),Picea mariana,0.00001
+33,boundary layer conductance (projected area basis),Picea mariana,0.08
+34,leaf water potential: start of conductance reduction,Picea mariana,-0.5
+35,leaf water potential: complete conductance reduction,Picea mariana,-1.7
+36,vapor pressure deficit: start of conductance reduction,Picea mariana,1
+37,vapor pressure deficit: complete conductance reduction,Picea mariana,4.1
+1,transfer growth period as fraction of growing season,Populus tremuloides,0.2
+2,litterfall as fraction of growing season,Populus tremuloides,0.2
+3,annual leaf and fine root turnover fraction,Populus tremuloides,1
+4,annual live wood turnover fraction,Populus tremuloides,0.7
+5,annual whole-plant mortality fraction,Populus tremuloides,0.01
+6,annual fire mortality fraction,Populus tremuloides,
+7,(ALLOCATION) new fine root C : new leaf C,Populus tremuloides,1.5
+8,(ALLOCATION) new stem C : new leaf C,Populus tremuloides,2
+9,(ALLOCATION) new live wood C : new total wood C,Populus tremuloides,0.1
+10,(ALLOCATION) new croot C : new stem C,Populus tremuloides,0.4
+11,(ALLOCATION) current growth proportion,Populus tremuloides,0.5
+12,C:N of leaves,Populus tremuloides,19.8
+13,"C:N of leaf litter, after retranslocation",Populus tremuloides,34.6
+14,C:N of fine roots,Populus tremuloides,19.8
+15,C:N of live wood,Populus tremuloides,92.6
+16,C:N of dead wood,Populus tremuloides,625
+17,leaf litter labile proportion,Populus tremuloides,39
+18,leaf litter cellulose proportion,Populus tremuloides,44
+19,leaf litter lignin proportion,Populus tremuloides,17
+20,fine root labile proportion,Populus tremuloides,30
+21,fine root cellulose proportion,Populus tremuloides,45
+22,fine root lignin proportion,Populus tremuloides,25
+23,dead wood cellulose proportion,Populus tremuloides,76
+24,dead wood lignin proportion,Populus tremuloides,24
+25,canopy water interception coefficient,Populus tremuloides,0.01
+26,canopy light extinction coefficient,Populus tremuloides,0.5
+27,all-sided to projected leaf area ratio,Populus tremuloides,2
+28,canopy average specific leaf area (projected area basis),Populus tremuloides,38.7
+29,ratio of shaded SLA:sunlit SLA,Populus tremuloides,2
+30,fraction of leaf N in Rubisco,Populus tremuloides,0.14
+31,maximum stomatal conductance (projected area basis),Populus tremuloides,0.005
+32,cuticular conductance (projected area basis),Populus tremuloides,0.00001
+33,boundary layer conductance (projected area basis),Populus tremuloides,0.02
+34,leaf water potential: start of conductance reduction,Populus tremuloides,-0.5
+35,leaf water potential: complete conductance reduction,Populus tremuloides,-2.3
+36,vapor pressure deficit: start of conductance reduction,Populus tremuloides,1
+37,vapor pressure deficit: complete conductance reduction,Populus tremuloides,4
