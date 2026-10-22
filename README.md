@@ -141,14 +141,16 @@ Run `calculateFLNR.R` first, then `mergeDB.R` (which reads `calculateFLNR.R`'s o
 
 ## How this feeds `BiomeBGC_dataPrep`
 
-`outputs/defaultEPC.csv` is uploaded (manually) to Google Drive, and `BiomeBGC_dataPrep`
-downloads it from there: `prepEPC()` in `BiomeBGC_dataPrep/R/prepInputFncts.R` fetches the file
-from a hard-coded Google Drive URL in `BiomeBGC_dataPrep.R`, filters it to the species the user
-has requested, and writes one `.epc` file per species (via `epcWrite2()` in
-`BiomeBGC_dataPrep/R/helper.R`) for Biome-BGC to read. There is currently no tracked link (e.g.
-a checksum or version tag) between a given commit of this repository and the file sitting
-behind that Google Drive URL — updating `defaultEPC.csv` here does not automatically update
-what `BiomeBGC_dataPrep` downloads.
+`BiomeBGC_dataPrep` downloads `outputs/defaultEPC.csv` directly from this repository's GitHub
+page: `prepEPC()` in `BiomeBGC_dataPrep/R/prepInputFncts.R` fetches the file from
+`https://raw.githubusercontent.com/DominiqueCaron/EPCdata/main/outputs/defaultEPC.csv` (hard-coded
+in `BiomeBGC_dataPrep.R`), filters it to the species the user has requested, and writes one
+`.epc` file per species (via `epcWrite2()` in `BiomeBGC_dataPrep/R/helper.R`) for Biome-BGC to
+read. Because the URL points at `main`, any commit to this repository that changes
+`outputs/defaultEPC.csv` on `main` immediately changes what `BiomeBGC_dataPrep` downloads on its
+next run — there is no pinned commit, checksum, or version tag, so the two repositories stay
+implicitly in sync only as long as `outputs/defaultEPC.csv` on `main` is kept up to date with
+whatever this repository's pipeline most recently produced.
 
 ---
 
