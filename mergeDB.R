@@ -169,7 +169,12 @@ epc <- rbindlist(list(white2000, hessl2004))
 # conductance definitions under one trait), converts conductance from
 # mmol m-2 s-1 to m s-1, and drops SLA (Biome-BGC expects it in mass units
 # of carbon rather than dry weight).
-try <- rtry::rtry_import("data/TRY/46297.txt")
+try <- prepInputs(
+  targetFile = "46297.txt",
+  destinationPath = "data/TRY/",
+  url = "https://drive.google.com/file/d/1rqvHkj5jqPg9uQFcXRanVDMS7bC4infh/view?usp=sharing",
+  fun = "rtry::rtry_import"
+)
 try <- try[!is.na(TraitID),]
 
 try <- merge(try, parameterList[, c("ParId", "Abbreviation", "TRY")], by.x = "TraitID", by.y = "TRY")
@@ -208,7 +213,12 @@ setorder(epc, ParId, species)
 # A separate TRY extract (TraitID 12, leaf lifespan in months) converted to
 # a leaf/fine-root turnover fraction (LFRT = 1 / (lifespan_months / 12)).
 # Turnover above 0.9 is treated as fully deciduous (LFRT = 1).
-try_leafLongevity <- rtry::rtry_import("data/TRY_longevity/47258.txt")
+try_leafLongevity <- prepInputs(
+  targetFile = "47258.txt",
+  destinationPath = "data/TRY_longevity/",
+  url = "https://drive.google.com/file/d/1jjtd4ECqoQapkjjbls4jjwrESILMvALG/view?usp=sharing",
+  fun = "rtry::rtry_import"
+)
 try_leafLongevity <- try_leafLongevity[TraitID == 12, ]
 # change to LFRT id
 try_leafLongevity[, TraitID := 474]
@@ -232,9 +242,19 @@ setorder(epc, ParId, species)
 # BOREAS data -------------------------------------------------------------
 # Boreal-forest EPC values from Bond-Lamberty et al. (2004) and
 # Kimball (1996), combined and joined to the parameter lookup table.
-bondLamberty2004 <- fread("data/BondLamberty2004.csv")
+bondLamberty2004 <- prepInputs(
+  targetFile = "BondLamberty2004.csv",
+  destinationPath = "data/",
+  url = "https://drive.google.com/file/d/1QSBjq3khw-d9DtjkMqX0bueHFtTP6d0R/view?usp=sharing",
+  fun = "data.table::fread"
+)
 bondLamberty2004[, source := "Bond-Lamberty2004"]
-kimball1996 <- fread("data/Kimball1996.csv")
+kimball1996 <- prepInputs(
+  targetFile = "Kimball1996.csv",
+  destinationPath = "data/",
+  url = "https://drive.google.com/file/d/1H4IV9abxFZwmHyvJ1mnPb_AgkcQg6c7a/view?usp=sharing",
+  fun = "data.table::fread"
+)
 kimball1996[, source := "Kimball1996"]
 BOREAS <- rbind(bondLamberty2004, kimball1996) |> na.omit()
 
@@ -250,7 +270,16 @@ epc <- rbind(epc, BOREAS)
 # specific leaf area, projected leaf-area-to-sapwood-area ratio, leaf C:N,
 # and leaf lifespan (converted to LFRT), restricted to the target species.
 
-Law_Berner2015 <- fread("data/NACP_TERRA-PNW_1292/data/NACP_TERRA_PNW_leaf_trait.csv", header = T, na.strings = "-9999")
+Law_Berner2015 <- prepInputs(
+  targetFile = "NACP_TERRA_PNW_leaf_trait.csv",
+  archive = "NACP_TERRA-PNW_1292.zip",
+  alsoExtract = "similar",
+  destinationPath = "data/",
+  url = "https://drive.google.com/file/d/1TPxzOTtOWjgUYKUpS8162viKTb6m-MfR/view?usp=sharing",
+  fun = "data.table::fread",
+  header = TRUE,
+  na.strings = "-9999"
+)
 Law_Berner2015 <- Law_Berner2015[-1,]
 Law_Berner2015 <- Law_Berner2015[,.(species = paste(GENUS, SPECIES), SLA = as.numeric(SLA_PSA)*0.1, LAI_all_proj = as.numeric(PSA_to_HSA)*2, CN_leaf = LEAF_CN, LFRT = 1/as.numeric(LEAF_LIFE), source = "Law and Berner2015", originalRef = NA)]
 setnames(Law_Berner2015, old = c("LAI_all_proj", "CN_leaf"), c("LAI_all:proj", "C:N_leaf"))
@@ -266,7 +295,12 @@ epc <- rbind(epc, Law_Berner2015)
 # computed per sample from paired leaf carbon and nitrogen content, then
 # matched back to species.
 
-topic <- fread("data/topic_sud-data_donnees_v2021-10.csv")
+topic <- prepInputs(
+  targetFile = "topic_sud-data_donnees_v2021-10.csv",
+  destinationPath = "data/",
+  url = "https://drive.google.com/file/d/1Mm4Dccon_dXPoEq_Ag1Bx5E-dc-zNfRD/view?usp=sharing",
+  fun = "data.table::fread"
+)
 # filter tree species
 topic <- topic[TOPICSpeciesName_NomEspèceTOPIC %in% speciesList$species & SampleType_TypeÉchantillon != "Understory"]
 # to calculate leaf C/N we want: carbon content and nitrogen content and match the samples
@@ -283,7 +317,15 @@ epc <- rbind(epc, topic_CNleaf)
 # Murray et al. (2019) compiled maximum stomatal conductance for woody
 # C3 species; restricted to Canadian tree species and converted to
 # m s-1 as above.
-STrait <- fread("data/Data_Sheet_1_Convergence in Maximum Stomatal Conductance of C3 Woody Angiosperms in Natural Ecosystems Across Bioclimatic Zones.csv", sep= ",")
+STrait <- prepInputs(
+  # a short targetFile avoids exceeding Windows' ~260-char path limit once
+  # reproducible appends its checksum-hash sidecar filename
+  targetFile = "STrait_MurrayEtAl2019.csv",
+  destinationPath = "data/",
+  url = "https://drive.google.com/file/d/1pA879jDPfcGLDm0KoJ-fB6tinu9CvKXZ/view?usp=sharing",
+  fun = "data.table::fread",
+  sep = ","
+)
 # Keep Canadian species
 STrait <- STrait[Species %in% speciesList$species & `Tree/shrub` == "Tree"]
 STrait <- STrait[, .(ParId = 31, parameter = "G_smax", species = Species, value = `Maximum stomatal conductance (porometry) calibrated with IRGA (mmol m-2 s-1)`, originalRef = "Murray et al., 2019", source = "Murray et al., 2019")]

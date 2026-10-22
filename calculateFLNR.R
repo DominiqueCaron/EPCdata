@@ -4,7 +4,12 @@
 # Writes outputs/flnr_estimate.csv, used by mergeDB.R.
 library(data.table)
 # Get downloaded data
-try_flnr <- rtry::rtry_import("data/TRY_flnr/46349.txt")
+try_flnr <- reproducible::prepInputs(
+  targetFile = "46349.txt",
+  destinationPath = "data/TRY_flnr/",
+  url = "https://drive.google.com/file/d/1WbU1w8jBhCpUPojZ_jcs8fLC9SKzDuYt/view?usp=sharing",
+  fun = "rtry::rtry_import"
+)
 
 # Extract leaf nitrogen content
 try_lna <- try_flnr[TraitID == 50, .(AccSpeciesName, StdValue)]
