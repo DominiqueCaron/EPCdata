@@ -17,6 +17,9 @@ speciesList <- read.csv("speciesList.csv", header = FALSE, col.names = "species"
 parameterList <- read.csv("parameterList.csv")
 
 # White 2000 data ---------------------------------------------------------
+# White et al. (2000) EPC values, split across five source spreadsheets.
+# Each spreadsheet is downloaded, cleaned of known species-name typos, and
+# standardized to ParId/parameter/species/value/originalRef/source.
 
 ## first table
 white1 <- prepInputs(
@@ -128,6 +131,8 @@ white5 <- white5[, .(ParId, parameter = Abbreviation, species = Species, value, 
 white2000 <- rbindlist(list(white1, white2, white3, white4, white5))
 
 # Hessl 2004 data ---------------------------------------------------------
+# Hessl et al. (2004) EPC database: parameter values keyed by species ID,
+# joined against a separate species lookup table.
 hessl2004 <- prepInputs(
   "ParameterValues.txt",
   destinationPath = "data/",
@@ -158,6 +163,12 @@ hessl2004 <- hessl2004[, .(ParId, parameter = Abbreviation, species, value, orig
 epc <- rbindlist(list(white2000, hessl2004))
 
 # TRY data ----------------------------------------------------------------
+# General trait extract from the TRY database (https://www.try-db.org).
+# Filters out White (2000)'s own records (already included above), keeps
+# only explicit maximum-stomatal-conductance records (TRY pools several
+# conductance definitions under one trait), converts conductance from
+# mmol m-2 s-1 to m s-1, and drops SLA (Biome-BGC expects it in mass units
+# of carbon rather than dry weight).
 try <- rtry::rtry_import("data/TRY/46297.txt")
 try <- try[!is.na(TraitID),]
 
@@ -194,6 +205,9 @@ setorder(epc, ParId, species)
 
 
 # TRY leaf longevity -----------------------------------------------------------
+# A separate TRY extract (TraitID 12, leaf lifespan in months) converted to
+# a leaf/fine-root turnover fraction (LFRT = 1 / (lifespan_months / 12)).
+# Turnover above 0.9 is treated as fully deciduous (LFRT = 1).
 try_leafLongevity <- rtry::rtry_import("data/TRY_longevity/47258.txt")
 try_leafLongevity <- try_leafLongevity[TraitID == 12, ]
 # change to LFRT id
@@ -216,9 +230,11 @@ epc <- rbind(epc, try_leafLongevity)
 setorder(epc, ParId, species)
 
 # BOREAS data -------------------------------------------------------------
+# Boreal-forest EPC values from Bond-Lamberty et al. (2004) and
+# Kimball (1996), combined and joined to the parameter lookup table.
 bondLamberty2004 <- fread("data/BondLamberty2004.csv")
 bondLamberty2004[, source := "Bond-Lamberty2004"]
-kimball1996 <- fread("Kimball1996.csv")
+kimball1996 <- fread("data/Kimball1996.csv")
 kimball1996[, source := "Kimball1996"]
 BOREAS <- rbind(bondLamberty2004, kimball1996) |> na.omit()
 
@@ -230,8 +246,11 @@ epc <- rbind(epc, BOREAS)
 
 
 # NACP-TERRA_PNW data -----------------------------------------------------
+# Law & Berner (2015) leaf-trait data for Pacific Northwest species:
+# specific leaf area, projected leaf-area-to-sapwood-area ratio, leaf C:N,
+# and leaf lifespan (converted to LFRT), restricted to the target species.
 
-Law_Berner2015 <- fread("data/NACP_TERRA-PNW_1292/NACP_TERRA-PNW_1292/data/NACP_TERRA_PNW_leaf_trait.csv", header = T, na.strings = "-9999")
+Law_Berner2015 <- fread("data/NACP_TERRA-PNW_1292/data/NACP_TERRA_PNW_leaf_trait.csv", header = T, na.strings = "-9999")
 Law_Berner2015 <- Law_Berner2015[-1,]
 Law_Berner2015 <- Law_Berner2015[,.(species = paste(GENUS, SPECIES), SLA = as.numeric(SLA_PSA)*0.1, LAI_all_proj = as.numeric(PSA_to_HSA)*2, CN_leaf = LEAF_CN, LFRT = 1/as.numeric(LEAF_LIFE), source = "Law and Berner2015", originalRef = NA)]
 setnames(Law_Berner2015, old = c("LAI_all_proj", "CN_leaf"), c("LAI_all:proj", "C:N_leaf"))
@@ -243,6 +262,9 @@ Law_Berner2015 <- merge(Law_Berner2015, as.data.table(parameterList)[,.(ParId, p
 epc <- rbind(epc, Law_Berner2015)
 
 # TOPIC data --------------------------------------------------------------
+# Sudbury, Ontario tree-trait dataset. Used here only for leaf C:N ratio,
+# computed per sample from paired leaf carbon and nitrogen content, then
+# matched back to species.
 
 topic <- fread("data/topic_sud-data_donnees_v2021-10.csv")
 # filter tree species
@@ -258,6 +280,9 @@ topic_CNleaf <- topic_CNleaf[,.(ParId = 12, parameter = "C:N_leaf", species, val
 epc <- rbind(epc, topic_CNleaf)
 
 # S-Trait data ------------------------------------------------------------
+# Murray et al. (2019) compiled maximum stomatal conductance for woody
+# C3 species; restricted to Canadian tree species and converted to
+# m s-1 as above.
 STrait <- fread("data/Data_Sheet_1_Convergence in Maximum Stomatal Conductance of C3 Woody Angiosperms in Natural Ecosystems Across Bioclimatic Zones.csv", sep= ",")
 # Keep Canadian species
 STrait <- STrait[Species %in% speciesList$species & `Tree/shrub` == "Tree"]
@@ -267,10 +292,12 @@ STrait <- STrait[, .(ParId = 31, parameter = "G_smax", species = Species, value 
 STrait[, value := value * 2.45 * 10^-5 ]
 epc <- rbind(epc, STrait)
 
-# Identify duplicates
+# Identify duplicates and restrict to the target species list
 epc$dup <- duplicated(epc[,.(ParId, species, signif(value, 3))])
 epc <- epc[species %in% speciesList$species, ]
 
+# Exploratory plots: coverage and value distributions by parameter and
+# species. Visual inspection only -- not used by any downstream step.
 # Breakdown across parameters
 Require::Require(c("ggplot2", "patchwork"), repos= repos)
 epc$parameter <- factor(epc$parameter, levels = parameterList$Abbreviation)
@@ -312,7 +339,7 @@ ggplot(epcMean) +
   facet_wrap(~parameter, scales = "free") + 
   labs(y = "# of species")
 
-# Exclude outliers (based on visual inspection):
+# Exclude outliers (based on visual inspection of the plots above):
 epc <- epc[parameter != "FRC:LC" | value <= 4.5]
 epc <- epc[parameter != "C:N_fr" | value <= 100]
 epc <- epc[parameter != "C:N_lit" | value <= 120 | species != "Pinus contorta"] # See Thomas and Prescott, values should be around 88
@@ -324,6 +351,10 @@ epcMean <- aggregate(value ~ parameter + species, data = epc, FUN = "mean")
 
 
 # species-level traits ----------------------------------------------------
+# Average to one value per species for the 7 constants best resolved at
+# species level (turnover, three C:N ratios, SLA, max stomatal
+# conductance), add the FLNR estimates from calculateFLNR.R, and write
+# outputs/speciesLevelEPC.csv.
 
 speciesLevel <- epcMean[epcMean$parameter %in% c("LFRT", "C:N_leaf", "C:N_fr", "C:N_lit", "SLA", "G_smax", "FLNR"),]
 # get the FLNR estimates
@@ -342,6 +373,11 @@ speciesLevel <- dcast(as.data.table(speciesLevel), species ~ parameter, value.va
 fwrite(speciesLevel, "outputs/speciesLevelEPC.csv")
 
 # PFT-level traits --------------------------------------------------------
+# Assign each species to a plant functional type (ENF/DBF/DNF via
+# LandR::sppEquivalencies_CA, with Larix treated as deciduous needleleaf),
+# average the remaining constants per PFT, renormalize the
+# cellulose/lignin/labile tissue-fraction groups to sum to 100, and write
+# outputs/pftLevelEPC.csv.
 
 # Get species functional type
 epc <- merge(epc, LandR::sppEquivalencies_CA[,c("Latin_full", "Broadleaf" )], by.x = "species", by.y = "Latin_full")

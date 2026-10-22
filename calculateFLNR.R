@@ -1,3 +1,7 @@
+# Estimate FLNR (fraction of leaf nitrogen allocated to RuBisCO) per
+# species from TRY leaf-nitrogen-per-area and Vcmax25 (maximum carboxylation
+# rate at 25C) measurements. 
+# Writes outputs/flnr_estimate.csv, used by mergeDB.R.
 library(data.table)
 # Get downloaded data
 try_flnr <- rtry::rtry_import("data/TRY_flnr/46349.txt")
@@ -17,7 +21,7 @@ colnames(try_vcmax) <- c("species", "vcmax")
 # VCmax can be underestimated for some ENF species (see White et al., 2000), remove very low values
 try_vcmax <- try_vcmax[try_vcmax[, "vcmax"] > 20, ]
 
-# combine leaf nitrogen content
+# combine leaf nitrogen content with vcmax, per species
 try_flnr <- merge(try_lna, try_vcmax)
 # function to calculate fraction of nitrogen in Rubisco
 # VCmax25 = alpha15 * LNA * fNR * flnr
@@ -30,7 +34,7 @@ flnr <- function(lna, vcmax){
   return(flnr)
 }
 
-# calcualte flnr
+# calculate flnr and write the per-species estimate used by mergeDB.R
 try_flnr$flnr <- flnr(try_flnr$lna, try_flnr$vcmax)
 
 fwrite(try_flnr, "outputs/flnr_estimate.csv")
