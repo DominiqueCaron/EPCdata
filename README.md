@@ -26,8 +26,10 @@ constants:
   `data/Species.txt`).
 - **TRY** (https://www.try-db.org) — a global plant trait database. Used here for three
   separate extracts: general trait values including maximum stomatal conductance
-  (`data/TRY/46297.txt`), leaf nitrogen content and Vcmax25 for the RuBisCO-fraction
-  calculation (`data/TRY_flnr/46349.txt`), and leaf lifespan (`data/TRY_longevity/47258.txt`).
+  (originally `data/TRY/46297.txt`), leaf nitrogen content and Vcmax25 for the RuBisCO-fraction
+  calculation (originally `data/TRY_flnr/46349.txt`), and leaf lifespan (originally
+  `data/TRY_longevity/47258.txt`). **The raw TRY extracts are not stored in this repository**
+  — see "Data access and licensing" below.
 - **BOREAS** — Bond-Lamberty et al. (2005) and Kimball et al. (1997) boreal-forest parameter
   compilations (`data/BondLamberty2004.csv`, `data/Kimball1996.csv` — note the filenames use
   different years than the actual publication dates cited below).
@@ -73,6 +75,20 @@ deciduous broadleaf, DNF = deciduous needleleaf, i.e. larch).
   McElwain, J. C. (2019). Convergence in maximum stomatal conductance of C3 woody angiosperms
   in natural ecosystems across bioclimatic zones. *Frontiers in Plant Science*, 10, 558.
   (S-Trait.)
+
+## Data access and licensing
+
+- **TRY data are restricted and are not included in this repository.** TRY
+  (https://www.try-db.org) releases raw trait records to individual requesters under its own
+  data-use rules (see the `TRY_Intellectual_Property_Guidelines.pdf` that accompanies any TRY
+  request), which generally do not permit redistributing the raw export to third parties.
+  To rerun `calculateFLNR.R` or the TRY sections of `mergeDB.R`, request your own TRY data release
+  (requests 46297, 46349, and 47258, or equivalent trait/species selections) and place the resulting
+  `.txt` files at `data/TRY/`, `data/TRY_flnr/`, and `data/TRY_longevity/` respectively.
+- Other raw datasets committed here (White et al. 2000, Hessl et al. 2004, BOREAS, NACP-TERRA-
+  PNW, TOPIC, S-Trait) are included as downloaded/compiled from their respective published
+  sources; their individual licenses/terms have not been independently verified here, and
+  should be checked before further redistribution.
 
 ## Pipeline
 
